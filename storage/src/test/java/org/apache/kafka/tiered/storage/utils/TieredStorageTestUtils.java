@@ -178,6 +178,8 @@ public class TieredStorageTestUtils {
         // a "small" number of records (i.e. such that the average record size times the number of records is
         // much less than the segment size), the number of records which hold in a segment is the multiple of 12
         // defined below.
+
+        // TODO: WIP - Need to consider options for dealing with this segment roll approach not being valid for this PR.
         topicProps.put(TopicConfig.SEGMENT_INDEX_BYTES_CONFIG, String.valueOf(12 * maxRecordBatchPerSegment));
         // To verify records physically absent from Kafka's storage can be consumed via the second tier storage, we
         // want to delete log segments as soon as possible. When tiered storage is active, an inactive log

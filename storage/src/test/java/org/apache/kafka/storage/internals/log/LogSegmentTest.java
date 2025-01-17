@@ -619,7 +619,7 @@ public class LogSegmentTest {
         File tempDir = TestUtils.tempDirectory();
         Map<String, Object> configMap = new HashMap<>();
         configMap.put(TopicConfig.INDEX_INTERVAL_BYTES_CONFIG, 10);
-        configMap.put(TopicConfig.SEGMENT_INDEX_BYTES_CONFIG, 1000);
+        configMap.put(TopicConfig.SEGMENT_INDEX_BYTES_CONFIG, 1024);
         configMap.put(TopicConfig.SEGMENT_JITTER_MS_CONFIG, 0);
         LogConfig logConfig = new LogConfig(configMap);
         try (LogSegment seg = LogSegment.open(tempDir, 40, logConfig, Time.SYSTEM, false,
@@ -643,7 +643,7 @@ public class LogSegmentTest {
         // Set up the log configuration
         Map<String, Object> configMap = new HashMap<>();
         configMap.put(TopicConfig.INDEX_INTERVAL_BYTES_CONFIG, 10);
-        configMap.put(TopicConfig.SEGMENT_INDEX_BYTES_CONFIG, 1000);
+        configMap.put(TopicConfig.SEGMENT_INDEX_BYTES_CONFIG, 1024);
         configMap.put(TopicConfig.SEGMENT_JITTER_MS_CONFIG, 0);
         LogConfig logConfig = new LogConfig(configMap);
 

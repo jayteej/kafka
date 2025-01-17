@@ -22,6 +22,7 @@ import org.apache.kafka.tiered.storage.specs.KeyValueSpec;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.stream.IntStream;
 
 import static org.apache.kafka.common.utils.Utils.mkEntry;
 import static org.apache.kafka.common.utils.Utils.mkMap;
@@ -39,10 +40,14 @@ public final class AlterLogDirTest extends TieredStorageTestHarness {
         final int p0 = 0;
         final int partitionCount = 1;
         final int replicationFactor = 2;
-        final int maxBatchCountPerSegment = 1;
+        final int maxBatchCountPerSegment = 86;
         final boolean enableRemoteLogStorage = true;
         final int broker0 = 0;
         final int broker1 = 1;
+
+        KeyValueSpec[] kvs = IntStream.range(0, 1000)
+                .mapToObj(i -> new KeyValueSpec("k" + i, "v" + i))
+                .toArray(KeyValueSpec[]::new);
 
         builder
                 // create topicB with 1 partition and 1 RF
@@ -52,8 +57,7 @@ public final class AlterLogDirTest extends TieredStorageTestHarness {
                 .expectSegmentToBeOffloaded(broker1, topicB, p0, 0, new KeyValueSpec("k0", "v0"))
                 .expectSegmentToBeOffloaded(broker1, topicB, p0, 1, new KeyValueSpec("k1", "v1"))
                 .expectEarliestLocalOffsetInLogDirectory(topicB, p0, 2L)
-                .produce(topicB, p0, new KeyValueSpec("k0", "v0"), new KeyValueSpec("k1", "v1"),
-                        new KeyValueSpec("k2", "v2"))
+                .produce(topicB, p0, kvs)
                 // alter dir within the replica, we only expect one replicaId
                 .alterLogDir(topicB, p0, Collections.singletonList(broker0).get(0))
                 // make sure the altered replica can still be elected as the leader
@@ -61,7 +65,8 @@ public final class AlterLogDirTest extends TieredStorageTestHarness {
                 // produce some more events and verify the earliest local offset
                 .expectEarliestLocalOffsetInLogDirectory(topicB, p0, 3L)
                 .produce(topicB, p0, new KeyValueSpec("k3", "v3"))
-                // consume from the beginning of the topic to read data from local and remote storage
+                // consume from the beginning of the topic to read data from local and remote
+                // storage
                 .expectFetchFromTieredStorage(broker0, topicB, p0, 3)
                 .consume(topicB, p0, 0L, 4, 3);
     }

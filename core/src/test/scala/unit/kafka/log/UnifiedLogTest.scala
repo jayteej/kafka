@@ -2364,7 +2364,7 @@ class UnifiedLogTest {
   def testAsyncDelete(): Unit = {
     def createRecords = TestUtils.singletonRecords(value = "test".getBytes, timestamp = mockTime.milliseconds - 1000L)
     val asyncDeleteMs = 1000
-    val logConfig = LogTestUtils.createLogConfig(segmentBytes = createRecords.sizeInBytes * 5, segmentIndexBytes = 1000, indexIntervalBytes = 10000,
+    val logConfig = LogTestUtils.createLogConfig(segmentBytes = createRecords.sizeInBytes * 5, segmentIndexBytes = 1024, indexIntervalBytes = 10000,
                                     retentionMs = 999, fileDeleteDelayMs = asyncDeleteMs)
     val log = createLog(logDir, logConfig)
 
@@ -2657,7 +2657,7 @@ class UnifiedLogTest {
   @Test
   def testDeleteOldSegments(): Unit = {
     def createRecords = TestUtils.singletonRecords(value = "test".getBytes, timestamp = mockTime.milliseconds - 1000)
-    val logConfig = LogTestUtils.createLogConfig(segmentBytes = createRecords.sizeInBytes * 5, segmentIndexBytes = 1000, retentionMs = 999)
+    val logConfig = LogTestUtils.createLogConfig(segmentBytes = createRecords.sizeInBytes * 5, segmentIndexBytes = 1024, retentionMs = 999)
     val log = createLog(logDir, logConfig)
 
     // append some messages to create some segments
@@ -2707,7 +2707,7 @@ class UnifiedLogTest {
   @Test
   def testLogDeletionAfterClose(): Unit = {
     def createRecords = TestUtils.singletonRecords(value = "test".getBytes, timestamp = mockTime.milliseconds - 1000)
-    val logConfig = LogTestUtils.createLogConfig(segmentBytes = createRecords.sizeInBytes * 5, segmentIndexBytes = 1000, retentionMs = 999)
+    val logConfig = LogTestUtils.createLogConfig(segmentBytes = createRecords.sizeInBytes * 5, segmentIndexBytes = 1024, retentionMs = 999)
     val log = createLog(logDir, logConfig)
 
     // append some messages to create some segments
@@ -3543,7 +3543,7 @@ class UnifiedLogTest {
   def testSegmentDeletionWithHighWatermarkInitialization(): Unit = {
     val logConfig = LogTestUtils.createLogConfig(
       segmentBytes = 512,
-      segmentIndexBytes = 1000,
+      segmentIndexBytes = 1024,
       retentionMs = 999
     )
     val log = createLog(logDir, logConfig)
@@ -3567,7 +3567,7 @@ class UnifiedLogTest {
   def testCannotDeleteSegmentsAtOrAboveHighWatermark(): Unit = {
     val logConfig = LogTestUtils.createLogConfig(
       segmentBytes = 512,
-      segmentIndexBytes = 1000,
+      segmentIndexBytes = 1024,
       retentionMs = 999
     )
     val log = createLog(logDir, logConfig)
@@ -3610,7 +3610,7 @@ class UnifiedLogTest {
   def testCannotIncrementLogStartOffsetPastHighWatermark(): Unit = {
     val logConfig = LogTestUtils.createLogConfig(
       segmentBytes = 512,
-      segmentIndexBytes = 1000,
+      segmentIndexBytes = 1024,
       retentionMs = 999
     )
     val log = createLog(logDir, logConfig)
@@ -4123,7 +4123,7 @@ class UnifiedLogTest {
 
   @Test
   def testActiveSegmentDeletionDueToRetentionTimeBreachWithRemoteStorage(): Unit = {
-    val logConfig = LogTestUtils.createLogConfig(indexIntervalBytes = 1, segmentIndexBytes = 12,
+    val logConfig = LogTestUtils.createLogConfig(indexIntervalBytes = 1, segmentIndexBytes = 1024,
       retentionMs = 3, localRetentionMs = 1, fileDeleteDelayMs = 0, remoteLogStorageEnable = true)
     val log = createLog(logDir, logConfig, remoteStorageSystemEnable = true)
 

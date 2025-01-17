@@ -811,7 +811,7 @@ class LogLoaderTest {
     Files.createFile(bogusTimeIndex2.toPath)
 
     def createRecords = TestUtils.singletonRecords(value = "test".getBytes, timestamp = mockTime.milliseconds)
-    val logConfig = LogTestUtils.createLogConfig(segmentBytes = createRecords.sizeInBytes * 5, segmentIndexBytes = 1000, indexIntervalBytes = 1)
+    val logConfig = LogTestUtils.createLogConfig(segmentBytes = createRecords.sizeInBytes * 5, segmentIndexBytes = 1024, indexIntervalBytes = 1)
     val log = createLog(logDir, logConfig)
 
     // Force the segment to access the index files because we are doing index lazy loading.
@@ -841,7 +841,7 @@ class LogLoaderTest {
   def testReopenThenTruncate(): Unit = {
     def createRecords = TestUtils.singletonRecords(value = "test".getBytes, timestamp = mockTime.milliseconds)
     // create a log
-    val logConfig = LogTestUtils.createLogConfig(segmentBytes = createRecords.sizeInBytes * 5, segmentIndexBytes = 1000, indexIntervalBytes = 10000)
+    val logConfig = LogTestUtils.createLogConfig(segmentBytes = createRecords.sizeInBytes * 5, segmentIndexBytes = 1024, indexIntervalBytes = 10000)
     var log = createLog(logDir, logConfig)
 
     // add enough messages to roll over several segments then close and re-open and attempt to truncate
@@ -860,7 +860,7 @@ class LogLoaderTest {
   @Test
   def testOpenDeletesObsoleteFiles(): Unit = {
     def createRecords = TestUtils.singletonRecords(value = "test".getBytes, timestamp = mockTime.milliseconds - 1000)
-    val logConfig = LogTestUtils.createLogConfig(segmentBytes = createRecords.sizeInBytes * 5, segmentIndexBytes = 1000, retentionMs = 999)
+    val logConfig = LogTestUtils.createLogConfig(segmentBytes = createRecords.sizeInBytes * 5, segmentIndexBytes = 1024, retentionMs = 999)
     var log = createLog(logDir, logConfig)
 
     // append some messages to create some segments

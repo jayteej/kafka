@@ -1808,7 +1808,7 @@ class LogCleanerTest extends Logging {
     val map = new FakeOffsetMap(1000)
     val logProps = new Properties()
     logProps.put(TopicConfig.SEGMENT_BYTES_CONFIG, 120: java.lang.Integer)
-    logProps.put(TopicConfig.SEGMENT_INDEX_BYTES_CONFIG, 120: java.lang.Integer)
+    logProps.put(TopicConfig.SEGMENT_INDEX_BYTES_CONFIG, 1024: java.lang.Integer)
     logProps.put(TopicConfig.CLEANUP_POLICY_CONFIG, TopicConfig.CLEANUP_POLICY_COMPACT)
     val logConfig = new LogConfig(logProps)
     val log = makeLog(config = logConfig)
